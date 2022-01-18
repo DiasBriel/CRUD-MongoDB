@@ -4,6 +4,8 @@ require("dotenv").config();
 
 const app = express();
 
+const personRoutes = require("./routes/personRoutes");
+
 const DB_USER = process.env.USER;
 const DB_PASSWORD = process.env.PASSWORD;
 
@@ -11,11 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "Ola Express!",
-  });
-});
+app.use("/person", personRoutes);
 
 moongose
   .connect(

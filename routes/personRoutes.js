@@ -35,6 +35,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+//Get person by ID
 router.get("/:id", async (req, res) => {
   const userId = req.params.id;
 
@@ -44,6 +45,32 @@ router.get("/:id", async (req, res) => {
 
     if (!person) {
       res.status(422).json({ message: "User not found..." });
+      return;
+    }
+
+    res.status(200).json(person);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+//Update person
+router.patch("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const { name, salary, approved } = req.body;
+
+  const person = {
+    name,
+    salary,
+    approved,
+  };
+
+  try {
+    const updatedPerson = await Person.updateOne({ _id: id }, person);
+
+    if (updatedPerson.matchedCount === 0) {
+      res.status(422).json({ message: "User not updated..." });
       return;
     }
 
